@@ -1,0 +1,21 @@
+.header {
+  width: 100%;
+  text-align: center;
+  background-color: #34495e;
+  padding: 15px 0px 15px 0px;
+}
+
+
+.title {
+  margin-top: 20px;
+  font-size: 1.1em;
+  color: #FFF;
+}
+
+.logo {
+  width: 17%;
+}
+
+.upload-area {
+  margin: 40px 0px 0px 40px;
+}
