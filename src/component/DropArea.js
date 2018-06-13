@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Dropzone from 'react-dropzone'
-import csvToJson from '../utilis/csvToJson';
-import xlsToJson from '../utilis/xlsToJson';
+import csvToJson from '../utilis/converter/csvToJson';
+import xlsxToJson from '../utilis/converter/xlsxToJson';
 
 export default class DropArea extends Component {
   constructor(props) {
@@ -17,8 +17,10 @@ export default class DropArea extends Component {
     this.state.files.map((file) => {
       switch (file.type) {
         case 'application/vnd.ms-excel':
-          console.log(xlsToJson(file));
-          xlsToJson(file);
+        case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+          xlsxToJson(file).then((xlsxJson) => {
+            console.log(xlsxJson);
+          });
           break;
         case 'text/csv':
           csvToJson(file).then((csvJson) => {
@@ -42,7 +44,8 @@ export default class DropArea extends Component {
     }
     if (rejectedFile.length) {
       this.setState({displayError : true})
-      console.log(`this file is rejected ${rejectedFile}`);
+      console.log(`this file is rejected`);
+      console.log(rejectedFile);
     }
   }
 
@@ -57,9 +60,9 @@ export default class DropArea extends Component {
     return (
       <div>
         <Dropzone
-          accept="application/vnd.ms-excel, text/csv"
+          accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           onDrop={this.onDrop.bind(this)}>
-          <p>Drop your file here we accept only csv and xls</p>
+          <p>Drop your file here we accept only csv, xls, xlsx</p>
         </Dropzone>
         {message}
         <ul>

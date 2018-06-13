@@ -1,8 +1,9 @@
-import readCsv from './readCsv';
+import readCsvFile from '../reader/readCsvFile';
 
 export default function csvToJson(csv) {
   return new Promise((resolve, reject) => {
-    readCsv(csv).then((csvAsText) => {
+    readCsvFile(csv).then((csvAsText) => {
+      // Ajouter le code pour formater l'objet du CSV
         var lines = csvAsText.split("\n");
         var result = [];
         var headers = lines[0].split(",");
@@ -15,6 +16,8 @@ export default function csvToJson(csv) {
           result.push(obj);
         }
         resolve(result)
+    }, (error) => {
+      console.warn(error);
     })
   });
 }
