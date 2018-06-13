@@ -8,6 +8,6 @@ export default function (csv) {
     reader.onload = () => {
       resolve(reader.result);
     };
-    reader.readAsText(csv);
+    reader.readAsBinaryString(csv);
   });
 }

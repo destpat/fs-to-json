@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone'
 import csvToJson from '../utilis/converter/csvToJson';
 import xlsxToJson from '../utilis/converter/xlsxToJson';
+import axios from 'axios';
 
 export default class DropArea extends Component {
   constructor(props) {
@@ -10,21 +11,38 @@ export default class DropArea extends Component {
       files: [],
       displayError: false
     }
-    this.convertToJson = this.convertToJson.bind(this)
+    this.sendInJson = this.sendInJson.bind(this)
   }
 
-  convertToJson(){
+  handleJsonFile(json){
+    let files = this.state.files;
+    this.props.handleJsonFile(json);
+  }
+
+  postFile(xlsxJson) {
+    axios.post('https://test.sympl.fr/test.php', xlsxJson)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  sendInJson(){
     this.state.files.map((file) => {
       switch (file.type) {
         case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           xlsxToJson(file).then((xlsxJson) => {
-            console.log(xlsxJson);
+            this.handleJsonFile(xlsxJson);
+            this.postFile(xlsxJson);
           });
           break;
         case 'text/csv':
           csvToJson(file).then((csvJson) => {
-            console.log(csvJson);
+            this.handleJsonFile(csvJson);
+            // @TODO Adding code for CSV FILE
           })
           break;
         default:
@@ -44,8 +62,6 @@ export default class DropArea extends Component {
     }
     if (rejectedFile.length) {
       this.setState({displayError : true})
-      console.log(`this file is rejected`);
-      console.log(rejectedFile);
     }
   }
 
@@ -60,9 +76,11 @@ export default class DropArea extends Component {
     return (
       <div>
         <Dropzone
-          accept="application/vnd.ms-excel, text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+          accept="text/csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
           onDrop={this.onDrop.bind(this)}>
-          <p>Drop your file here we accept only csv, xls, xlsx</p>
+          <p style={{textAlign: 'center'}}>
+            Drop your file here we accept only csv, xlsx
+          </p>
         </Dropzone>
         {message}
         <ul>
@@ -72,7 +90,7 @@ export default class DropArea extends Component {
             })
           }
         </ul>
-        <button onClick={this.convertToJson}>Convert your file(s) to JSON</button>
+        <button onClick={this.sendInJson}>Post your file(s) in JSON format</button>
       </div>
     );
   }

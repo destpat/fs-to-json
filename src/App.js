@@ -4,6 +4,21 @@ import logo from './images/logo_blanc.png';
 import './App.css';
 
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      files : []
+    }
+    this.handleJsonFile = this.handleJsonFile.bind(this)
+  }
+
+  handleJsonFile(loadFiles) {
+    this.setState({files: loadFiles});
+    console.log('$$$$$$$$$*');
+    console.log(this.state.files);
+    console.log('$$$$$$$$$*');
+  }
+
   render() {
     return (
       <div>
@@ -14,7 +29,7 @@ class App extends Component {
           </div>
         </div>
         <div className='upload-area'>
-          <DropArea />
+          <DropArea handleJsonFile={this.handleJsonFile}/>
         </div>
       </div>
     );
