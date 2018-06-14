@@ -7,7 +7,7 @@ import axios from 'axios';
  *  les données sont valides
  */
 export default function (jsonFile) {
-  console.log('sending object');
+  console.log('sent object');
   console.log(jsonFile);
   axios.post('https://test.sympl.fr/test.php', jsonFile).then((res) => {
     console.log(res);
