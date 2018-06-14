@@ -26,17 +26,17 @@ class App extends Component {
     return (
       <div>
         <div className="header">
-          <img className="logo" src={logo} alt={'logo'}/>
-          <div className='title'>
+          <img className="logo" src={logo} alt='logo'/>
+          <div className="title">
             <span> Test upload CSV / XLS </span>
           </div>
         </div>
-        <div className='upload-area'>
-          <DropArea handleJsonFile={this.handleJsonFile}/>
-        </div>
-        {
-          this.state.filesIsLoad ? <Table rowObject={this.state.rowObject}/> : null
-        }
+          <div className="upload-area">
+            <DropArea handleJsonFile={this.handleJsonFile}/>
+          </div>
+          {
+            this.state.filesIsLoad ? <Table rowObject={this.state.rowObject}/> : null
+          }
       </div>
     );
   }

@@ -44,7 +44,7 @@ export default class Table extends Component {
     this.formatData()
     const header = this.getKeyList().map((columnName, index) => <th key={index}>{columnName}</th>);
     return (
-      <table className="test">
+      <table className="table">
       <tbody>
         <tr>
           {header}
