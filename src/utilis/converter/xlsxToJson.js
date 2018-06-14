@@ -10,17 +10,17 @@ return new Promise((resolve, reject) => {
       type: 'binary'
     });
       var XL_row_object = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
-      XL_row_object.map((row) => {
+      XL_row_object.forEach((row) => {
         if (!commands.filter(e => e.externalReference === row['Référence commande']).length) {
           commands.push({
             externalReference : row['Référence commande']
           })
         }
       })
-      commands.map((command) => {
+      commands.forEach((command) => {
         let items = [];
         let recipientAddress = {};
-        XL_row_object.map((row) => {
+        XL_row_object.forEach((row) => {
           if (command.externalReference === row['Référence commande']) {
             items.push({
               description : row['Description produit'],
@@ -47,7 +47,10 @@ return new Promise((resolve, reject) => {
         recipientAddress = {};
         items = [];
       })
-      resolve({commands : commands})
+      resolve({
+        commands : commands,
+        XL_row_object : XL_row_object
+      })
     }, (error) => {
       console.warn(error.message);
     })

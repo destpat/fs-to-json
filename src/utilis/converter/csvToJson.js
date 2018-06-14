@@ -4,6 +4,7 @@ export default function csvToJson(csv) {
   return new Promise((resolve, reject) => {
     fileReader(csv).then((csvAsText) => {
       // @TODO Adding code for format object CSV to JSON
+      // eslint-disable-next-line
         var lines = csvAsText.split("\n");
         var result = [];
         resolve(result)

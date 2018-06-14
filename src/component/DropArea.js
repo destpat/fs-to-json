@@ -15,7 +15,6 @@ export default class DropArea extends Component {
   }
 
   handleJsonFile(json){
-    let files = this.state.files;
     this.props.handleJsonFile(json);
   }
 
@@ -30,13 +29,14 @@ export default class DropArea extends Component {
   }
 
   sendInJson(){
-    this.state.files.map((file) => {
+    this.state.files.forEach((file) => {
       switch (file.type) {
         case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           xlsxToJson(file).then((xlsxJson) => {
-            this.handleJsonFile(xlsxJson);
-            this.postFile(xlsxJson);
+            console.log(xlsxJson.commands);
+            this.handleJsonFile(xlsxJson.XL_row_object);
+            this.postFile(xlsxJson.commands);
           });
           break;
         case 'text/csv':
@@ -54,7 +54,7 @@ export default class DropArea extends Component {
   onDrop(acceptedFile, rejectedFile) {
     this.setState({displayError : false})
     if (acceptedFile.length) {
-      acceptedFile.map((file) => {
+      acceptedFile.forEach((file) => {
         this.setState(prevState => ({
             files: [...prevState.files, file]
         }))
