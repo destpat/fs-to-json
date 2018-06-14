@@ -8,20 +8,17 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      files : {},
+      rowObject : {},
       filesIsLoad : false
     }
     this.handleJsonFile = this.handleJsonFile.bind(this)
   }
 
-  handleJsonFile(loadFiles) {
+  handleJsonFile(rowObject) {
     this.setState({
-      files: loadFiles,
+      rowObject: rowObject,
       filesIsLoad : true
     });
-    console.log('$$$$$$$$$*');
-    console.log(this.state.files);
-    console.log('$$$$$$$$$*');
   }
 
   render() {
@@ -38,7 +35,7 @@ class App extends Component {
           <DropArea handleJsonFile={this.handleJsonFile}/>
         </div>
         {
-          this.state.filesIsLoad ? <Table jsonFile={this.state.files}/> : null
+          this.state.filesIsLoad ? <Table rowObject={this.state.rowObject}/> : null
         }
       </div>
     );

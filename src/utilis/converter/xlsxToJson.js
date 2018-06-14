@@ -1,22 +1,30 @@
 import XLSX from 'xlsx';
 import fileReader from '../fileReader';
-
+/**
+ *  @function
+ *  @param {Object[]} xlsxFile
+ *  @return {Promise}
+ *  @description Utilise js-xlsx pour transformer
+ *  le fichier xlsx en objet JSON avec le format
+ *  requis pour la validation du serveur
+ */
 export default function (xlsxFile) {
-return new Promise((resolve, reject) => {
-  let commands = [];
-
-  fileReader(xlsxFile).then((res) => {
-    var workbook = XLSX.read(res, {
-      type: 'binary'
-    });
+  return new Promise((resolve, reject) => {
+    let commands = [];
+    fileReader(xlsxFile).then((res) => {
+      var workbook = XLSX.read(res, {
+        type: 'binary'
+      });
       var XL_row_object = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+      /* Ajout d'un objet par référence de commande, dans le tableau commands */
       XL_row_object.forEach((row) => {
-        if (!commands.filter(e => e.externalReference === row['Référence commande']).length) {
+        if (!commands.filter(element => element.externalReference === row['Référence commande']).length) {
           commands.push({
             externalReference : row['Référence commande']
           })
         }
       })
+      /* Binding entre les clés de l'objet XLSX et le format attendu */
       commands.forEach((command) => {
         let items = [];
         let recipientAddress = {};
@@ -52,7 +60,7 @@ return new Promise((resolve, reject) => {
         XL_row_object : XL_row_object
       })
     }, (error) => {
-      console.warn(error.message);
-    })
-  });
+    console.warn(error.message);
+  })
+ });
 }

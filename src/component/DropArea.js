@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Dropzone from 'react-dropzone'
 import csvToJson from '../utilis/converter/csvToJson';
 import xlsxToJson from '../utilis/converter/xlsxToJson';
-import axios from 'axios';
+import postJsonFile from '../utilis/postJsonFile';
 
 export default class DropArea extends Component {
   constructor(props) {
@@ -13,36 +13,34 @@ export default class DropArea extends Component {
     }
     this.sendInJson = this.sendInJson.bind(this)
   }
-
-  handleJsonFile(json){
-    this.props.handleJsonFile(json);
+  /** @function handleJsonFile
+   *  @param {Object[]} rowObject
+   *  @description
+   *  Appelle la methode "handleJsonFile" du props
+   *  pour mettre à jour les données dans le state
+   *  du composant parent App.js
+   */
+  handleJsonFile(rowObject){
+    this.props.handleJsonFile(rowObject);
   }
-
-  postFile(xlsxJson) {
-    axios.post('https://test.sympl.fr/test.php', xlsxJson)
-    .then((res) => {
-      console.log(res);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
-
+  /** @function sendInJson
+   *  @description
+   * Appelle la méthode permettant de convertir les fichiers
+   * en JSON selon leur type , et envoie le JSON au serveur
+   */
   sendInJson(){
     this.state.files.forEach((file) => {
       switch (file.type) {
-        case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           xlsxToJson(file).then((xlsxJson) => {
-            console.log(xlsxJson.commands);
             this.handleJsonFile(xlsxJson.XL_row_object);
-            this.postFile(xlsxJson.commands);
+            postJsonFile(xlsxJson.commands);
           });
           break;
         case 'text/csv':
           csvToJson(file).then((csvJson) => {
             this.handleJsonFile(csvJson);
-            // @TODO Adding code for CSV FILE
+            // @TODO Ajouter le code pour la gestion des fichiers CSV
           })
           break;
         default:
@@ -50,7 +48,13 @@ export default class DropArea extends Component {
       }
     })
   }
-
+  /** @function onDrop
+   *  @param {Array} acceptedFile
+   *  @param {Array} rejectedFile
+   *  @description
+   * Function utiliser lors du drag and drop
+   * du fichier
+   */
   onDrop(acceptedFile, rejectedFile) {
     this.setState({displayError : false})
     if (acceptedFile.length) {
@@ -66,7 +70,7 @@ export default class DropArea extends Component {
   }
 
   render() {
-    const errorMessage = <div> Invalid </div>;
+    const errorMessage = <div style={{marginTop: '20px', color: '#e74c3c'}}> Invalid file type </div>;
     let message;
     if (this.state.displayError) {
       message = errorMessage;
@@ -82,12 +86,10 @@ export default class DropArea extends Component {
             Drop your file here we accept only csv, xlsx
           </p>
         </Dropzone>
-        {message}
+        { message }
         <ul>
           {
-            this.state.files.map((file, index) => {
-              return <li key={index}>{file.name}</li>;
-            })
+            this.state.files.map((file, index) => <li key={index}>{file.name}</li>)
           }
         </ul>
         <button onClick={this.sendInJson}>Post your file(s) in JSON format</button>

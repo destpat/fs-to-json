@@ -1,4 +1,9 @@
-export default function (csv) {
+/** @function
+*   @return {Promise}
+*   @description utilisation de FileReader
+*   pour lire le fichier csv ou xlsx.
+*/
+export default function (file) {
   const reader = new FileReader();
   return new Promise((resolve, reject) => {
     reader.onerror = () => {
@@ -8,6 +13,6 @@ export default function (csv) {
     reader.onload = () => {
       resolve(reader.result);
     };
-    reader.readAsBinaryString(csv);
+    reader.readAsBinaryString(file);
   });
 }
