@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import DropArea from './component/DropArea.js';
+import DropArea from './component/DropArea';
+import Table from './component/Table';
 import logo from './images/logo_blanc.png';
 import './App.css';
 
@@ -7,7 +8,7 @@ class App extends Component {
   constructor(props){
     super(props)
     this.state = {
-      files : []
+      files : {}
     }
     this.handleJsonFile = this.handleJsonFile.bind(this)
   }
@@ -31,6 +32,7 @@ class App extends Component {
         <div className='upload-area'>
           <DropArea handleJsonFile={this.handleJsonFile}/>
         </div>
+        <Table jsonFile={this.state.files}/>
       </div>
     );
   }

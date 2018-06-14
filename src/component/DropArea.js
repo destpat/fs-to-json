@@ -35,8 +35,9 @@ export default class DropArea extends Component {
         case 'application/vnd.ms-excel':
         case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
           xlsxToJson(file).then((xlsxJson) => {
-            this.handleJsonFile(xlsxJson);
-            this.postFile(xlsxJson);
+            console.log(xlsxJson.commands);
+            this.handleJsonFile(xlsxJson.XL_row_object);
+            this.postFile(xlsxJson.commands);
           });
           break;
         case 'text/csv':

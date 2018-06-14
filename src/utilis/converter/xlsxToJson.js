@@ -47,7 +47,10 @@ return new Promise((resolve, reject) => {
         recipientAddress = {};
         items = [];
       })
-      resolve({commands : commands})
+      resolve({
+        commands : commands,
+        XL_row_object : XL_row_object
+      })
     }, (error) => {
       console.warn(error.message);
     })
